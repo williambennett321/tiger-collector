@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+<section class="card-container">
+  {% for tiger in tigers %}
+    <div class="card">
+      <div class="card-content">
+        <h2 class="card-title">{{ tiger.name }}</h2>
+        {% if tiger.age > 0 %}
+          <p>A {{ tiger.age }} year old {{ tiger.breed }}</p>
+        {% else %}
+          <p>A {{ tiger.breed }} kitten.</p>
+        {% endif %}
+        <p><small>{{ tiger.description }}</small></p>
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+{% endblock %}
