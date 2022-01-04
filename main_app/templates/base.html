@@ -14,8 +14,10 @@
   <header>
     <nav>
       <ul>
-        <li><a href="/tigers">All Tigers</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href="{% url 'tigers_index' %}">All Tigers</a></li>
+        <li><a href="{% url 'tigers_create' %}">Add a Tiger</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+
       </ul>
     </nav>
   </header>

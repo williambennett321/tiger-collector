@@ -1,23 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 
-{% block head %}
-{% endblock %}
+{% block head %} 
+
+{% endblock %} 
 
 {% block content %}
 
 <section class="card-container">
   {% for tiger in tigers %}
-    <div class="card">
-      <div class="card-content">
+  
+
+  <div class="card">
+    <div class="card-content">
+      <a href="{% url 'tigers_detail' tiger.id %}">
         <h2 class="card-title">{{ tiger.name }}</h2>
-        {% if tiger.age > 0 %}
-          <p>A {{ tiger.age }} year old {{ tiger.breed }}</p>
-        {% else %}
-          <p>A {{ tiger.breed }} kitten.</p>
-        {% endif %}
-        <p><small>{{ tiger.description }}</small></p>
-      </div>
+      </a>
+      {% if tiger.age > 0 %}
+      <p>A {{ tiger.age }} year old {{ tiger.breed }}</p>
+      {% else %}
+      <p>A {{ tiger.breed }} tiger.</p>
+      {% endif %}
+      <p><small>{{ tiger.description }}</small></p>
     </div>
+  </div>
   {% endfor %}
 </section>
 
