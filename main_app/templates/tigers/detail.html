@@ -9,8 +9,8 @@
   src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"
 >
 </script>
-
-<script defer src="{% static 'js/tiger-detail.js' %}"></script>
+{% comment %} 
+<script defer src="{% static 'js/tiger-detail.js' %}"></script> {% endcomment %}
 {% endblock %}
 
 {% block content %}
@@ -43,28 +43,86 @@
         method="post" 
         class="subsection-content"
       >
+      {% if tiger.fed_for_today %}
+        <p class="fed">{{tiger.name}} has been fed all their meals for today!</p>
+      {% else %}
+        <p class="unfed">{{tiger.name}} might be hungry!</p>
+      {% endif %}
         {% csrf_token %}
         {{ feeding_form.as_p }}
         <button type="submit" class="btn submit">Add Feeding</button>
       </form>
       <h3>Past Feedings</h3>
-    <table>
-      <thead>
-        <tr><th>Date</th><th>Meal</th></tr>
-      </thead>
-      <tbody>
-        {% for feeding in tiger.feeding_set.all %}
-          <tr>
-            <td>{{feeding.date}}</td>
-            <td>{{feeding.get_meal_display}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-      <p class="subsection-content">{{cat.name}} has never been fed 😟</p>
-    {% endif %}
+      {% if tiger.feeding_set.all.count %}
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Meal</th></tr>
+          </thead>
+          <tbody>
+            {% for feeding in tiger.feeding_set.all %}
+              <tr>
+                <td>{{feeding.date}}</td>
+                <td>{{feeding.get_meal_display}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="subsection-content">{{tiger.name}} has never been fed 😟</p>
+      {% endif %}
   </section>
+</div>
+
+<section class="toys">
+  <div class="subsection-title">
+    <h2>Toys</h2>
+    <h3>Tire</h3>
+    <h3>log</h3>
+    <h3>water sprinkler</h3>
+  </div>
+  <h3>{{ tiger.name }}'s Toys</h3>
+  <div class="subsection-content">
+    {% if tiger.toys.count %}
+      {% for toy in tiger.toys.all %}
+        <div class="toy-container">
+          <div 
+            class="color-block"
+            style="background-color: {{ toy.color }}"
+          ></div>
+          <a href="{% url 'toys_detail' toy.id %}">
+            <p>A {{ toy.color }} {{ toy.name }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-toys">{{tiger.name}} doesn't have any toys!</p>
+    {% endif %}
+  </div>
+  <h3>Available Toys</h3>
+  <div class="subsection-content">
+    {% if toys.count %}
+        {% for toy in toys.all %}
+          <div class="toy-container">
+            <div 
+              class="color-block"
+              style="background-color: {{ toy.color }}"
+            ></div>
+            <a href="{% url 'toys_detail' toy.id %}">
+              <p>A {{ toy.color }} {{ toy.name }}</p>
+            </a>
+            <form action="{% url 'assoc_toy' tiger.id toy.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn submit">give toy to {{tiger.name}}</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="all-toys">
+          {{tiger.name}} has all of the toys!
+        </p>
+      {% endif %}
+  </div>
+</section>
 </div>
 
 {% endblock %}
